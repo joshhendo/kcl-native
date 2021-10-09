@@ -1,0 +1,27 @@
+{
+  "name": "kcl-native",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc -p tsconfig.json",
+    "run-bootstrap": "kcl-bootstrap.bat -e -p /samples/basic_sample/consumer/sample.properties"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/aws-kcl": "^2.0.1",
+    "@types/aws-sdk": "^2.7.0",
+    "@types/uuid": "^8.3.1",
+    "aws-kcl": "^2.1.0",
+    "aws-sdk": "^2.958.0",
+    "kinesalite": "^3.3.3",
+    "typescript": "^4.3.5"
+  },
+  "dependencies": {
+    "date-fns": "^2.25.0",
+    "kinesis-readable": "^1.2.0",
+    "uuid": "^8.3.2"
+  }
+}
