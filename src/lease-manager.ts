@@ -3,6 +3,9 @@ import {Lease} from "./dynamodb/dynamodb-repository";
 import * as dateFns from 'date-fns';
 import {Properties} from "./properties-manager";
 import {startWorker} from "./kinesis-worker";
+import AWS = require("aws-sdk");
+import {ShardManager} from "./shard-manager";
+
 
 let MAX_LEASES_OWNED = 1;
 
@@ -14,6 +17,13 @@ interface LeaseListItem {
 let allLeases: LeaseListItem[] = [];
 let ownedLeases: string[] = [];
 const workers: { [key: string]: any } = {};
+
+const client = new AWS.Kinesis({
+  region: 'us-east-1',
+  params: {StreamName: 'kclnodejssample'},
+});
+
+const shardManager = new ShardManager(client);
 
 // https://github.com/singular-labs/amazon-kinesis-client/blob/acc61ea41dcc83b90e9d752eb555302503a30891/amazon-kinesis-client/src/main/java/software/amazon/kinesis/leases/dynamodb/DynamoDBLeaseTaker.java#L251
 async function updateAllLeases() {
@@ -37,7 +47,9 @@ async function updateAllLeases() {
 }
 
 async function getExpiredLeases() {
-  return allLeases.filter(x => dateFns.differenceInMilliseconds(new Date(), x.last_updated) >= Properties.failoverTimeMillis);
+  return allLeases
+    .filter(x => x.lease.checkpoint !== 'SHARD_END')
+    .filter(x => dateFns.differenceInMilliseconds(new Date(), x.last_updated) >= Properties.failoverTimeMillis);
 }
 
 
@@ -53,10 +65,13 @@ function createKillFunction(shardKey: string) {
 }
 
 function createWorker(shardKey: string, checkpoint: string | null) {
-  workers[shardKey] = startWorker('shardId-000000000000', checkpoint, createKillFunction(shardKey), runFunction);
+  workers[shardKey] = startWorker(shardKey, checkpoint, createKillFunction(shardKey), runFunction);
 }
 
 export async function checkLeases() {
+  // Check that all the shards are up to date
+  await shardManager.checkShards();
+
   await updateAllLeases();
   const expiredLeases = await getExpiredLeases();
 
@@ -82,7 +97,11 @@ export async function checkLeases() {
   for (const ownedLeaseToRemove of ownedLeasesToRemove) {
     ownedLeases = ownedLeases.filter(x => x !== ownedLeaseToRemove.lease.leaseKey);
     if (workers[ownedLeaseToRemove.lease.leaseKey]) {
-      workers[ownedLeaseToRemove.lease.leaseKey].close();
+      try {
+        workers[ownedLeaseToRemove.lease.leaseKey].close();
+      } catch (err) {
+        console.error(`something went wrong closing a lease`, err);
+      }
     }
   }
 

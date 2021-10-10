@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -p tsconfig.json",
-    "run-bootstrap": "kcl-bootstrap.bat -e -p /samples/basic_sample/consumer/sample.properties"
+    "run-bootstrap": "kcl-bootstrap.bat -e -p /samples/basic_sample/consumer/sample.properties",
+    "test-produce": "node samples/basic_sample/producer/sample_kinesis_producer_app.js"
   },
   "author": "",
   "license": "MIT",

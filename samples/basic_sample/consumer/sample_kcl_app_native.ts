@@ -31,11 +31,11 @@ const Kinesalite = require('kinesalite');
   //   }));
   // });
 
-  await new Promise(((resolve, reject) => {
-    kinesis.listStreams((err, data) => {
-      resolve(null);
-    })
-  }));
+  // await new Promise(((resolve, reject) => {
+  //   kinesis.listStreams((err, data) => {
+  //     resolve(null);
+  //   })
+  // }));
 
   const client = new AWS.Kinesis({
     region: 'us-east-1',
@@ -50,7 +50,7 @@ const Kinesalite = require('kinesalite');
       }
       return resolve(data);
     })
-  })
+  });
 
   const options = {
     shardId: shards.Shards[0].ShardId,

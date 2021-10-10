@@ -6,8 +6,8 @@ import {checkLeases, startLeaseCoordinator} from "./src/lease-manager";
   // const result = await listLeases();
 
   //console.log(result);
-  //await startLeaseCoordinator();
-  await checkLeases();
-  await new Promise((resolve => setTimeout(resolve, 10050)));
-  await checkLeases();
+  await startLeaseCoordinator();
+  // await checkLeases();
+  // await new Promise((resolve => setTimeout(resolve, 10050)));
+  // await checkLeases();
 })();

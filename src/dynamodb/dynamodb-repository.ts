@@ -56,6 +56,13 @@ export async function updateLeaseOwner(shardId: string, currentLeaseOwner: strin
     }
   };
 
+  if (currentLeaseOwner == null) {
+    params.ConditionExpression = 'attribute_not_exists(leaseOwner)';
+    delete params.ExpressionAttributeNames;
+    delete params.ExpressionAttributeValues[':existingLeaseOwner'];
+    delete params.ExpressionAttributeValues[':leaseCounter'];
+  }
+
   await DynamoDbClient.update(params).promise();
 }
 
@@ -77,4 +84,26 @@ export async function updateCheckpoint(shardId: string, checkpoint: string) {
   };
 
   await DynamoDbClient.update(params).promise();
+}
+
+export async function createNewShardRecord(shardId: string, parentShardId: string[]) {
+  try {
+    const params = {
+      TableName: Properties.applicationName,
+      ConditionExpression: 'attribute_not_exists(leaseKey)',
+      Item: {
+        leaseKey: shardId,
+        checkpoint: 'TRIM_HORIZON',
+        leaseCounter: 0,
+        checkpointSubSequenceNumber: '0',
+        ownerSwitchesSinceCheckpoint: '0',
+        ...(parentShardId.length) && ({parentShardId}),
+      }
+    };
+
+    await DynamoDbClient.put(params).promise();
+  } catch (err) {
+    // Most likely a concurrency issue
+    console.error(`error creating new shard record`, err);
+  }
 }
