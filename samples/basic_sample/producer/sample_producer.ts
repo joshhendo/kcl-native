@@ -63,7 +63,8 @@ export function sampleProducer(kinesis: AWS.Kinesis, config: any) {
     var record = JSON.stringify({
       time : currTime,
       sensor : sensor,
-      reading : reading
+      reading : reading,
+      date: new Date().toISOString(),
     });
 
     var recordParams = {

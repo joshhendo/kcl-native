@@ -96,8 +96,8 @@ export async function createNewShardRecord(shardId: string, parentShardId: strin
         checkpoint: 'TRIM_HORIZON',
         leaseCounter: 0,
         checkpointSubSequenceNumber: '0',
-        ownerSwitchesSinceCheckpoint: '0',
-        ...(parentShardId.length) && ({parentShardId}),
+        ownerSwitchesSinceCheckpoint: 0,
+        ...(parentShardId.length) && ({parentShardId: DynamoDbClient.createSet(parentShardId)}),
       }
     };
 

@@ -7,6 +7,8 @@
 
 import util = require('util');
 import kcl = require('aws-kcl');
+import fs = require('fs');
+import * as dateFns from 'date-fns';
 
 /**
  * A simple implementation for the record processor (consumer) that simply writes the data to a log file.
@@ -14,6 +16,10 @@ import kcl = require('aws-kcl');
  * Be careful not to use the 'stderr'/'stdout'/'console' as log destination since it is used to communicate with the
  * {https://github.com/awslabs/amazon-kinesis-client/blob/master/src/main/java/com/amazonaws/services/kinesis/multilang/package-info.java MultiLangDaemon}.
  */
+
+function writeToLogFile(data: string) {
+  fs.appendFileSync(`${__dirname}/output.txt`, data + '\n');
+}
 
 function recordProcessor(): kcl.RecordProcessor {
   const log = {
@@ -42,6 +48,14 @@ function recordProcessor(): kcl.RecordProcessor {
         sequenceNumber = record.sequenceNumber;
         partitionKey = record.partitionKey;
         log.info(util.format('ShardID: %s, Record: %s, SeqenceNumber: %s, PartitionKey:%s', shardId, data, sequenceNumber, partitionKey));
+
+        const parsed = JSON.parse(data);
+        const sentDate = new Date(parsed.date);
+        const receivedDate = new Date();
+        const differenceInMs = dateFns.differenceInMilliseconds(receivedDate, sentDate);
+
+        writeToLogFile(data);
+        writeToLogFile(`took ${differenceInMs}ms received at ${receivedDate.toISOString()}`);
       }
       if (!sequenceNumber) {
         completeCallback();

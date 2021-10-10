@@ -7,7 +7,7 @@ import AWS = require("aws-sdk");
 import {ShardManager} from "./shard-manager";
 
 
-let MAX_LEASES_OWNED = 1;
+let MAX_LEASES_OWNED = 2;
 
 interface LeaseListItem {
   lease: Lease;
@@ -54,12 +54,28 @@ async function getExpiredLeases() {
 
 
 async function runFunction(data: any) {
-  console.log('got data: ' + data);
-  await new Promise((resolve => setTimeout(resolve, 2000)));
+  // console.log('got data: ' + data);
+  console.log(data.Data.toString('utf8'));
+  try {
+    const parsed = JSON.parse(data.Data.toString('utf8'));
+    const sentDate = new Date(parsed.date);
+    const receivedDate = new Date();
+    const differenceInMs = dateFns.differenceInMilliseconds(receivedDate, sentDate);
+    console.log(`took ${differenceInMs}ms received at ${receivedDate.toISOString()}`);
+  } catch (err) {
+    console.log('error parsing data');
+  }
+
+  // await new Promise((resolve => setTimeout(resolve, 2000)));
 }
 
 function createKillFunction(shardKey: string) {
+  let killed = false;
   return () => {
+    if (killed) {
+      return;
+    }
+    killed = true;
     delete workers[shardKey];
   }
 }

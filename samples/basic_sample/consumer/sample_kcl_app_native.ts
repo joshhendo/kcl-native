@@ -1,4 +1,5 @@
 import AWS = require('aws-sdk');
+import * as dateFns from "date-fns";
 const KinesisReadable = require('kinesis-readable');
 const Kinesalite = require('kinesalite');
 
@@ -53,16 +54,29 @@ const Kinesalite = require('kinesalite');
   });
 
   const options = {
-    shardId: shards.Shards[0].ShardId,
+    shardId: 'shardId-000000000028',
     iterator: 'TRIM_HORIZON',
-    limit: 100
+    limit: 100,
+    readInterval: 200,
   }
 
   const readable = KinesisReadable(client, options);
 
   readable
     .on('data', function(records: any) {
-      console.log(records);
+      //console.log(records);
+
+      for (const record of records) {
+        try {
+          const parsed = JSON.parse(record.Data.toString('utf8'));
+          const sentDate = new Date(parsed.date);
+          const receivedDate = new Date();
+          const differenceInMs = dateFns.differenceInMilliseconds(receivedDate, sentDate);
+          console.log(`took ${differenceInMs}ms received at ${receivedDate.toISOString()}`);
+        } catch (err) {
+          console.log('error parsing data');
+        }
+      }
 
       // Should checkpoint here
 

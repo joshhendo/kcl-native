@@ -10,7 +10,8 @@ export function startWorker(shardId: string, startSequence: string | null, killF
 
   const options: any = {
     shardId: shardId,
-    limit: 100
+    limit: 100,
+    readInterval: 200,
   };
 
   if (startSequence === 'SHARD_END') {
@@ -53,6 +54,7 @@ export function startWorker(shardId: string, startSequence: string | null, killF
         shardEnded = true;
         await checkpoint(shardId, 'SHARD_END');
         readable.close();
+        killFn();
         return;
       }
 

@@ -1,0 +1,60 @@
+{"time":776,"sensor":"sensor-57530","reading":722372,"date":"2021-10-10T11:27:27.776Z"}
+took 4214ms received at 2021-10-10T11:27:31.990Z
+{"time":773,"sensor":"sensor-19910","reading":113416,"date":"2021-10-10T11:27:27.774Z"}
+took 4217ms received at 2021-10-10T11:27:31.991Z
+{"time":783,"sensor":"sensor-35285","reading":813979,"date":"2021-10-10T11:27:27.783Z"}
+took 4209ms received at 2021-10-10T11:27:31.992Z
+{"time":785,"sensor":"sensor-27472","reading":441158,"date":"2021-10-10T11:27:27.785Z"}
+took 4207ms received at 2021-10-10T11:27:31.992Z
+{"time":782,"sensor":"sensor-64625","reading":167694,"date":"2021-10-10T11:27:27.782Z"}
+took 4211ms received at 2021-10-10T11:27:31.993Z
+{"time":777,"sensor":"sensor-62155","reading":840453,"date":"2021-10-10T11:27:27.777Z"}
+took 4217ms received at 2021-10-10T11:27:31.994Z
+{"time":786,"sensor":"sensor-43838","reading":487119,"date":"2021-10-10T11:27:27.786Z"}
+took 4215ms received at 2021-10-10T11:27:32.001Z
+{"time":862,"sensor":"sensor-31977","reading":792021,"date":"2021-10-10T11:27:33.862Z"}
+took 1156ms received at 2021-10-10T11:27:35.018Z
+{"time":857,"sensor":"sensor-18954","reading":989230,"date":"2021-10-10T11:27:33.859Z"}
+took 1160ms received at 2021-10-10T11:27:35.019Z
+{"time":866,"sensor":"sensor-92846","reading":263626,"date":"2021-10-10T11:27:33.866Z"}
+took 1153ms received at 2021-10-10T11:27:35.019Z
+{"time":864,"sensor":"sensor-25525","reading":82410,"date":"2021-10-10T11:27:33.864Z"}
+took 1155ms received at 2021-10-10T11:27:35.019Z
+{"time":869,"sensor":"sensor-72157","reading":40016,"date":"2021-10-10T11:27:33.869Z"}
+took 1430ms received at 2021-10-10T11:27:35.299Z
+{"time":867,"sensor":"sensor-4565","reading":237793,"date":"2021-10-10T11:27:33.867Z"}
+took 1433ms received at 2021-10-10T11:27:35.300Z
+{"time":865,"sensor":"sensor-64267","reading":422780,"date":"2021-10-10T11:27:33.865Z"}
+took 1435ms received at 2021-10-10T11:27:35.300Z
+{"time":863,"sensor":"sensor-90034","reading":38378,"date":"2021-10-10T11:27:33.863Z"}
+took 2119ms received at 2021-10-10T11:27:35.982Z
+{"time":779,"sensor":"sensor-14560","reading":891004,"date":"2021-10-10T11:27:27.779Z"}
+took 14423ms received at 2021-10-10T11:27:42.202Z
+{"time":780,"sensor":"sensor-19259","reading":682048,"date":"2021-10-10T11:27:27.780Z"}
+took 14422ms received at 2021-10-10T11:27:42.202Z
+{"time":784,"sensor":"sensor-90166","reading":723141,"date":"2021-10-10T11:27:27.784Z"}
+took 14419ms received at 2021-10-10T11:27:42.203Z
+{"time":869,"sensor":"sensor-10823","reading":182567,"date":"2021-10-10T11:27:33.869Z"}
+took 8334ms received at 2021-10-10T11:27:42.203Z
+{"time":868,"sensor":"sensor-83554","reading":590673,"date":"2021-10-10T11:27:33.868Z"}
+took 8336ms received at 2021-10-10T11:27:42.204Z
+{"time":313,"sensor":"sensor-69680","reading":171345,"date":"2021-10-10T11:27:42.313Z"}
+took 1055ms received at 2021-10-10T11:27:43.368Z
+{"time":315,"sensor":"sensor-64188","reading":617496,"date":"2021-10-10T11:27:42.315Z"}
+took 1061ms received at 2021-10-10T11:27:43.376Z
+{"time":326,"sensor":"sensor-33262","reading":908161,"date":"2021-10-10T11:27:42.326Z"}
+took 1315ms received at 2021-10-10T11:27:43.641Z
+{"time":324,"sensor":"sensor-86854","reading":571018,"date":"2021-10-10T11:27:42.324Z"}
+took 1317ms received at 2021-10-10T11:27:43.641Z
+{"time":321,"sensor":"sensor-76629","reading":740855,"date":"2021-10-10T11:27:42.321Z"}
+took 1321ms received at 2021-10-10T11:27:43.642Z
+{"time":307,"sensor":"sensor-40358","reading":69274,"date":"2021-10-10T11:27:42.309Z"}
+took 1335ms received at 2021-10-10T11:27:43.644Z
+{"time":331,"sensor":"sensor-16878","reading":738530,"date":"2021-10-10T11:27:42.331Z"}
+took 1313ms received at 2021-10-10T11:27:43.644Z
+{"time":330,"sensor":"sensor-98825","reading":566646,"date":"2021-10-10T11:27:42.330Z"}
+took 1315ms received at 2021-10-10T11:27:43.645Z
+{"time":328,"sensor":"sensor-23538","reading":373684,"date":"2021-10-10T11:27:42.328Z"}
+took 1317ms received at 2021-10-10T11:27:43.645Z
+{"time":318,"sensor":"sensor-23467","reading":753957,"date":"2021-10-10T11:27:42.318Z"}
+took 1328ms received at 2021-10-10T11:27:43.646Z
