@@ -54,7 +54,7 @@ const Kinesalite = require('kinesalite');
   });
 
   const options = {
-    shardId: 'shardId-000000000028',
+    shardId: 'shardId-000000000000',
     iterator: 'TRIM_HORIZON',
     limit: 100,
     readInterval: 200,
@@ -72,6 +72,7 @@ const Kinesalite = require('kinesalite');
           const sentDate = new Date(parsed.date);
           const receivedDate = new Date();
           const differenceInMs = dateFns.differenceInMilliseconds(receivedDate, sentDate);
+          console.log(record);
           console.log(`took ${differenceInMs}ms received at ${receivedDate.toISOString()}`);
         } catch (err) {
           console.log('error parsing data');

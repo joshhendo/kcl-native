@@ -5,6 +5,7 @@ import {Properties} from "./properties-manager";
 import {startWorker} from "./kinesis-worker";
 import AWS = require("aws-sdk");
 import {ShardManager} from "./shard-manager";
+import {RecordProcessor} from "aws-kcl";
 
 
 let MAX_LEASES_OWNED = 2;
@@ -53,21 +54,21 @@ async function getExpiredLeases() {
 }
 
 
-async function runFunction(data: any) {
-  // console.log('got data: ' + data);
-  console.log(data.Data.toString('utf8'));
-  try {
-    const parsed = JSON.parse(data.Data.toString('utf8'));
-    const sentDate = new Date(parsed.date);
-    const receivedDate = new Date();
-    const differenceInMs = dateFns.differenceInMilliseconds(receivedDate, sentDate);
-    console.log(`took ${differenceInMs}ms received at ${receivedDate.toISOString()}`);
-  } catch (err) {
-    console.log('error parsing data');
-  }
-
-  // await new Promise((resolve => setTimeout(resolve, 2000)));
-}
+// async function runFunction(data: any) {
+//   // console.log('got data: ' + data);
+//   console.log(data.Data.toString('utf8'));
+//   try {
+//     const parsed = JSON.parse(data.Data.toString('utf8'));
+//     const sentDate = new Date(parsed.date);
+//     const receivedDate = new Date();
+//     const differenceInMs = dateFns.differenceInMilliseconds(receivedDate, sentDate);
+//     console.log(`took ${differenceInMs}ms received at ${receivedDate.toISOString()}`);
+//   } catch (err) {
+//     console.log('error parsing data');
+//   }
+//
+//   // await new Promise((resolve => setTimeout(resolve, 2000)));
+// }
 
 function createKillFunction(shardKey: string) {
   let killed = false;
@@ -80,11 +81,11 @@ function createKillFunction(shardKey: string) {
   }
 }
 
-function createWorker(shardKey: string, checkpoint: string | null) {
-  workers[shardKey] = startWorker(shardKey, checkpoint, createKillFunction(shardKey), runFunction);
+function createWorker(shardKey: string, checkpoint: string | null, rp: RecordProcessor) {
+  workers[shardKey] = startWorker(shardKey, checkpoint, createKillFunction(shardKey), rp.processRecords);
 }
 
-export async function checkLeases() {
+export async function checkLeases(rp: RecordProcessor) {
   // Check that all the shards are up to date
   await shardManager.checkShards();
 
@@ -130,7 +131,7 @@ export async function checkLeases() {
     const result = await claimLease(expiredLease.lease.leaseKey, expiredLease.lease.leaseOwner, expiredLease.lease.leaseCounter);
     if (result === true) {
       ownedLeases.push(expiredLease.lease.leaseKey);
-      createWorker(expiredLease.lease.leaseKey, expiredLease.lease.checkpoint || null);
+      createWorker(expiredLease.lease.leaseKey, expiredLease.lease.checkpoint || null, rp);
     }
   }
 
@@ -139,20 +140,20 @@ export async function checkLeases() {
 
 let semaphore = false;
 
-export async function startLeaseCoordinator() {
+export async function startLeaseCoordinator(rp: RecordProcessor) {
   // startWorker('shardId-000000000000', (data => {
   //   console.log(data);
   // }))
 
   if (semaphore === false) {
     semaphore = true;
-    await checkLeases();
+    await checkLeases(rp);
     semaphore = false;
   }
   setInterval(async function () {
     if (semaphore === false) {
       semaphore = true;
-      await checkLeases();
+      await checkLeases(rp);
       semaphore = false;
     }
   }, 10000);

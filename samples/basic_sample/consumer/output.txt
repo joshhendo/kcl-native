@@ -58,3 +58,23 @@ took 1315ms received at 2021-10-10T11:27:43.645Z
 took 1317ms received at 2021-10-10T11:27:43.645Z
 {"time":318,"sensor":"sensor-23467","reading":753957,"date":"2021-10-10T11:27:42.318Z"}
 took 1328ms received at 2021-10-10T11:27:43.646Z
+{"time":415,"sensor":"sensor-66382","reading":570698,"date":"2022-02-06T10:09:05.415Z"}
+took 2094ms received at 2022-02-06T10:09:07.509Z
+{"time":392,"sensor":"sensor-5596","reading":416280,"date":"2022-02-06T10:09:05.399Z"}
+took 2123ms received at 2022-02-06T10:09:07.522Z
+{"time":404,"sensor":"sensor-92747","reading":673488,"date":"2022-02-06T10:09:05.404Z"}
+took 2168ms received at 2022-02-06T10:09:07.572Z
+{"time":418,"sensor":"sensor-62533","reading":46621,"date":"2022-02-06T10:09:05.418Z"}
+took 2172ms received at 2022-02-06T10:09:07.590Z
+{"time":420,"sensor":"sensor-21662","reading":298864,"date":"2022-02-06T10:09:05.420Z"}
+{"time":412,"sensor":"sensor-57677","reading":319349,"date":"2022-02-06T10:09:05.412Z"}
+{"time":423,"sensor":"sensor-44720","reading":371103,"date":"2022-02-06T10:09:05.423Z"}
+took 2575ms received at 2022-02-06T10:09:07.995Z
+took 2572ms received at 2022-02-06T10:09:07.995Z
+took 2583ms received at 2022-02-06T10:09:07.995Z
+{"time":408,"sensor":"sensor-15739","reading":18386,"date":"2022-02-06T10:09:05.408Z"}
+{"time":429,"sensor":"sensor-39535","reading":284912,"date":"2022-02-06T10:09:05.429Z"}
+took 2865ms received at 2022-02-06T10:09:08.273Z
+took 2844ms received at 2022-02-06T10:09:08.273Z
+{"time":426,"sensor":"sensor-34223","reading":529774,"date":"2022-02-06T10:09:05.426Z"}
+took 2848ms received at 2022-02-06T10:09:08.274Z

@@ -1,8 +1,9 @@
 import AWS = require('aws-sdk');
 import {checkpoint} from "./dynamodb/dynamodb-lease-coordinater";
+import {Callback, ProcessRecordsInput} from "aws-kcl";
 const KinesisReadable = require('kinesis-readable')
 
-export function startWorker(shardId: string, startSequence: string | null, killFn: () => void, runFn: (data: any) => void) {
+export function startWorker(shardId: string, startSequence: string | null, killFn: () => void, runFn: (input: ProcessRecordsInput, completeCallback: Callback) => void) {
   const client = new AWS.Kinesis({
     region: 'us-east-1',
     params: {StreamName: 'kclnodejssample'},
@@ -30,9 +31,22 @@ export function startWorker(shardId: string, startSequence: string | null, killF
   let shardEnded = false;
 
   readable.on('data', async function(records: any) {
-    for (const record of records) {
+    /*for (const record of records) {
       await runFn(record);
-    }
+    }*/
+
+    const recordsMapped = records.map((x: any) => {
+      return {
+        sequenceNumber: x.SequenceNumber,
+        data: x.Data,
+        partitionKey: x.PartitionKey,
+      }
+    });
+
+    await runFn({
+      records: recordsMapped,
+      checkpointer: undefined,
+    }, null);
 
     // Need to checkpoint this
     if (shardEnded) {

@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -p tsconfig.json",
     "run-bootstrap": "kcl-bootstrap.bat -e -p /samples/basic_sample/consumer/sample.properties",
+    "run-bootstrap-linux": "kcl-bootstrap --java /usr/lib/jvm/jdk-17/bin/java -e -p ./sample.properties",
     "test-produce": "node samples/basic_sample/producer/sample_kinesis_producer_app.js"
   },
   "author": "",
@@ -14,10 +15,13 @@
   "devDependencies": {
     "@types/aws-kcl": "^2.0.1",
     "@types/aws-sdk": "^2.7.0",
+    "@types/mocha": "^9.1.0",
     "@types/uuid": "^8.3.1",
     "aws-kcl": "^2.1.0",
     "aws-sdk": "^2.958.0",
     "kinesalite": "^3.3.3",
+    "mocha": "^9.2.0",
+    "sinon": "^13.0.1",
     "typescript": "^4.3.5"
   },
   "dependencies": {

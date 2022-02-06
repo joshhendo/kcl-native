@@ -1,7 +1,11 @@
 import { Kinesis } from "aws-sdk";
+import {startLeaseCoordinator} from "./lease-manager";
+import {RecordProcessor} from "aws-kcl";
 
-type ProcessFunction = (data: any) => void;
-
-export async function register(processor: ProcessFunction, options?: Kinesis.Types.ClientConfiguration) {
-
+export function register(processor: RecordProcessor, options?: Kinesis.Types.ClientConfiguration) {
+    return {
+        run: () => {
+            startLeaseCoordinator(processor);
+        }
+    }
 }
