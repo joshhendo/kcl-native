@@ -1,11 +1,18 @@
 import { Kinesis } from "aws-sdk";
-import {startLeaseCoordinator} from "./lease-manager";
+import {configure, startLeaseCoordinator} from "./lease-manager";
 import {RecordProcessor} from "aws-kcl";
 
 export function register(processor: RecordProcessor, options?: Kinesis.Types.ClientConfiguration) {
-    return {
+
+    const result = {
+        configure: (client: Kinesis) => {
+            configure(client);
+            return result;
+        },
         run: () => {
             startLeaseCoordinator(processor);
         }
     }
+
+    return result;
 }

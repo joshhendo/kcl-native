@@ -24,6 +24,9 @@ export class ShardManager {
 
   public async checkShards() {
     const shards = await this.listShards();
+
+    // console.log(`shards: ${JSON.stringify(shards)}`);
+
     const records = await getAllRecords();
 
     // Check for any shards that have reached the end checkpoint

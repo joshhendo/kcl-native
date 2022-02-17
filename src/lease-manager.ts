@@ -6,9 +6,10 @@ import {startWorker} from "./kinesis-worker";
 import AWS = require("aws-sdk");
 import {ShardManager} from "./shard-manager";
 import {RecordProcessor} from "aws-kcl";
+import {Kinesis} from "aws-sdk";
 
 
-let MAX_LEASES_OWNED = 2;
+let MAX_LEASES_OWNED = 1;
 
 interface LeaseListItem {
   lease: Lease;
@@ -19,12 +20,8 @@ let allLeases: LeaseListItem[] = [];
 let ownedLeases: string[] = [];
 const workers: { [key: string]: any } = {};
 
-const client = new AWS.Kinesis({
-  region: 'us-east-1',
-  params: {StreamName: 'kclnodejssample'},
-});
-
-const shardManager = new ShardManager(client);
+let client: Kinesis;
+let shardManager: ShardManager;
 
 // https://github.com/singular-labs/amazon-kinesis-client/blob/acc61ea41dcc83b90e9d752eb555302503a30891/amazon-kinesis-client/src/main/java/software/amazon/kinesis/leases/dynamodb/DynamoDBLeaseTaker.java#L251
 async function updateAllLeases() {
@@ -54,22 +51,6 @@ async function getExpiredLeases() {
 }
 
 
-// async function runFunction(data: any) {
-//   // console.log('got data: ' + data);
-//   console.log(data.Data.toString('utf8'));
-//   try {
-//     const parsed = JSON.parse(data.Data.toString('utf8'));
-//     const sentDate = new Date(parsed.date);
-//     const receivedDate = new Date();
-//     const differenceInMs = dateFns.differenceInMilliseconds(receivedDate, sentDate);
-//     console.log(`took ${differenceInMs}ms received at ${receivedDate.toISOString()}`);
-//   } catch (err) {
-//     console.log('error parsing data');
-//   }
-//
-//   // await new Promise((resolve => setTimeout(resolve, 2000)));
-// }
-
 function createKillFunction(shardKey: string) {
   let killed = false;
   return () => {
@@ -83,6 +64,19 @@ function createKillFunction(shardKey: string) {
 
 function createWorker(shardKey: string, checkpoint: string | null, rp: RecordProcessor) {
   workers[shardKey] = startWorker(shardKey, checkpoint, createKillFunction(shardKey), rp.processRecords);
+
+  rp.initialize({
+    shardId: shardKey,
+    sequenceNumber: checkpoint,
+  }, () => {
+    // Not sure what to do here
+  });
+}
+
+function lostWorker(lease: LeaseListItem, rp: RecordProcessor) {
+  rp.leaseLost({}, () => {
+    // Not sure what to do here
+  });
 }
 
 export async function checkLeases(rp: RecordProcessor) {
@@ -116,6 +110,7 @@ export async function checkLeases(rp: RecordProcessor) {
     if (workers[ownedLeaseToRemove.lease.leaseKey]) {
       try {
         workers[ownedLeaseToRemove.lease.leaseKey].close();
+        lostWorker(ownedLeaseToRemove, rp);
       } catch (err) {
         console.error(`something went wrong closing a lease`, err);
       }
@@ -140,11 +135,12 @@ export async function checkLeases(rp: RecordProcessor) {
 
 let semaphore = false;
 
-export async function startLeaseCoordinator(rp: RecordProcessor) {
-  // startWorker('shardId-000000000000', (data => {
-  //   console.log(data);
-  // }))
+export async function configure(_client: Kinesis) {
+  client = _client;
+  shardManager = new ShardManager(client);
+}
 
+export async function startLeaseCoordinator(rp: RecordProcessor) {
   if (semaphore === false) {
     semaphore = true;
     await checkLeases(rp);
